@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THC Tincture Potency Calculator</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Circular', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #ffffff;
+  color: #1B3A2F;
+  line-height: 1.6;
+}
+
+.calculator-container {
+  max-width: 640px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f8faf9 0%, #eef5f2 100%);
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 8px rgba(27, 58, 47, 0.08);
+}
+
+.calculator-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.calculator-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1B3A2F;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
+}
+
+.calculator-subtitle {
+  font-size: 14px;
+  color: #5a7269;
+  margin: 0;
+  font-weight: 400;
+}
+
+.input-section {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(27, 58, 47, 0.06);
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 500px) {
+  .input-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1B3A2F;
+  margin-bottom: 8px;
+  letter-spacing: 0.01em;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #d4e3dc;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1B3A2F;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #1B3A2F;
+  box-shadow: 0 0 0 3px rgba(27, 58, 47, 0.1);
+}
+
+.input-helper {
+  font-size: 11px;
+  color: #7a9189;
+  margin-top: 6px;
+}
+
+.results-section {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(27, 58, 47, 0.06);
+}
+
+.results-header {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1B3A2F;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+}
+
+.checkmark {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: #1B3A2F;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  margin-right: 8px;
+}
+
+.result-card {
+  background: #f0f7f3;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result-card.primary {
+  background: linear-gradient(135deg, #1B3A2F 0%, #2d5447 100%);
+  color: white;
+}
+
+.result-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.result-card.primary .result-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.result-value {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.result-card.primary .result-value {
+  color: white;
+}
+
+.result-card.secondary .result-value {
+  font-size: 22px;
+  color: #1B3A2F;
+}
+
+.doses-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.dose-card {
+  background: #e8f3ed;
+  border-radius: 12px;
+  padding: 14px 12px;
+  text-align: center;
+}
+
+.dose-amount {
+  font-size: 11px;
+  color: #5a7269;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.dose-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1B3A2F;
+}
+
+.product-cta {
+  background: linear-gradient(135deg, #c9b5d4 0%, #d4c0dd 100%);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(201, 181, 212, 0.3);
+}
+
+.cta-header {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1B3A2F;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cta-description {
+  font-size: 13px;
+  color: #3d564c;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.cta-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.cta-spec {
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 6px 12px;
+  border-radius: 12px;
+  color: #1B3A2F;
+  font-weight: 500;
+}
+
+.cta-button {
+  display: block;
+  width: 100%;
+  background: #1B3A2F;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.cta-button:hover {
+  background: #2d5447;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(27, 58, 47, 0.2);
+}
+
+.reference-note {
+  background: #f8faf9;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 20px;
+  border: 1px solid #e8ede8;
+}
+
+.reference-text {
+  font-size: 11px;
+  color: #5a7269;
+  text-align: center;
+  margin: 0;
+}
+
+.reference-text strong {
+  color: #1B3A2F;
+  font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<div class="calculator-container">
+  <div class="calculator-header">
+    <h1 class="calculator-title">THC Tincture Potency Calculator</h1>
+    <p class="calculator-subtitle">Convert any label to precise mg measurements</p>
+  </div>
+
+  <div class="input-section">
+    <div class="input-grid">
+      <div class="input-group">
+        <label class="input-label" for="totalMg">Total mg in Bottle</label>
+        <input 
+          type="number" 
+          id="totalMg" 
+          class="input-field" 
+          value="900"
+          placeholder="600"
+          min="1"
+        >
+        <div class="input-helper">Example: 600mg, 900mg, 1200mg</div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="bottleSize">Bottle Size (mL)</label>
+        <input 
+          type="number" 
+          id="bottleSize" 
+          class="input-field" 
+          value="30"
+          placeholder="30"
+          min="1"
+        >
+        <div class="input-helper">Standard: 30mL or 60mL</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-section">
+    <h2 class="results-header">
+      <span class="checkmark">✓</span>
+      Your Results
+    </h2>
+
+    <div class="result-card primary">
+      <span class="result-label">Concentration</span>
+      <span class="result-value" id="mgPerMl">30 mg/mL</span>
+    </div>
+
+    <div class="result-card secondary">
+      <span class="result-label">Per Drop</span>
+      <span class="result-value" id="mgPerDrop">1.5 mg</span>
+    </div>
+
+    <div class="doses-grid">
+      <div class="dose-card">
+        <div class="dose-amount">0.25 mL</div>
+        <div class="dose-value" id="mgPer025">7.5 mg</div>
+      </div>
+
+      <div class="dose-card">
+        <div class="dose-amount">0.5 mL</div>
+        <div class="dose-value" id="mgPer05">15 mg</div>
+      </div>
+
+      <div class="dose-card">
+        <div class="dose-amount">1 mL</div>
+        <div class="dose-value" id="mgPer1">30 mg</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-cta">
+    <h3 class="cta-header">📊 Example: Mood's 1:1 THC & CBD Tincture</h3>
+    <p class="cta-description">
+      This calculator is pre-filled with our balanced 1:1 tincture (450mg THC + 450mg CBD = 900mg total per 30mL).
+    </p>
+    
+    <div class="cta-specs">
+      <span class="cta-spec">30 mg/mL</span>
+      <span class="cta-spec">1.5 mg per drop</span>
+      <span class="cta-spec">15 mg per 0.5mL</span>
+    </div>
+
+    <a href="https://mood.com/product/11-thc-cbd-tincture-900mg" class="cta-button" target="_parent">
+      Shop 1:1 THC & CBD Tincture (900mg) →
+    </a>
+  </div>
+
+  <div class="reference-note">
+    <p class="reference-text">
+      <strong>Standard Dropper:</strong> 1 mL = approximately 20 drops
+    </p>
+  </div>
+</div>
+
+<script>
+// Get input elements
+const totalMgInput = document.getElementById('totalMg');
+const bottleSizeInput = document.getElementById('bottleSize');
+
+// Get result elements
+const mgPerMlDisplay = document.getElementById('mgPerMl');
+const mgPerDropDisplay = document.getElementById('mgPerDrop');
+const mgPer025Display = document.getElementById('mgPer025');
+const mgPer05Display = document.getElementById('mgPer05');
+const mgPer1Display = document.getElementById('mgPer1');
+
+// Format number - show whole numbers without decimals, decimals with 1 place
+function formatNumber(num) {
+  if (isNaN(num) || !isFinite(num)) return '0';
+  return num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
+}
+
+// Calculate and update all results
+function updateCalculations() {
+  const totalMg = parseFloat(totalMgInput.value) || 0;
+  const bottleSize = parseFloat(bottleSizeInput.value) || 1;
+
+  // Prevent division by zero
+  if (bottleSize === 0) {
+    bottleSizeInput.value = 1;
+    return;
+  }
+
+  // Calculate values
+  const mgPerMl = totalMg / bottleSize;
+  const mgPerDrop = mgPerMl / 20;
+  const mgPer025 = mgPerMl * 0.25;
+  const mgPer05 = mgPerMl * 0.5;
+  const mgPer1 = mgPerMl * 1;
+
+  // Update display
+  mgPerMlDisplay.textContent = formatNumber(mgPerMl) + ' mg/mL';
+  mgPerDropDisplay.textContent = formatNumber(mgPerDrop) + ' mg';
+  mgPer025Display.textContent = formatNumber(mgPer025) + ' mg';
+  mgPer05Display.textContent = formatNumber(mgPer05) + ' mg';
+  mgPer1Display.textContent = formatNumber(mgPer1) + ' mg';
+}
+
+// Add event listeners for real-time calculation
+totalMgInput.addEventListener('input', updateCalculations);
+bottleSizeInput.addEventListener('input', updateCalculations);
+
+// Run initial calculation
+updateCalculations();
+</script>
+
+</body>
+</html>
